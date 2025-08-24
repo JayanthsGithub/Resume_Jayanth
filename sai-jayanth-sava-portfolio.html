@@ -1,114 +1,256 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sai Jayanth Sava • Portfolio</title>
-  <style>
-    :root {
-      --bg: #0f172a;      /* slate-900 */
-      --card: #111827;    /* gray-900 */
-      --muted: #94a3b8;   /* slate-400 */
-      --text: #e5e7eb;    /* gray-200 */
-      --accent: #22d3ee;  /* cyan-400 */
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: linear-gradient(120deg, #0b1220, #0f172a 60%);
-      color: var(--text);
-    }
-    .container { max-width: 980px; margin: 0 auto; padding: 24px; }
-    header { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; margin-bottom: 24px; }
-    .name { font-size: 34px; font-weight: 800; letter-spacing: .2px; }
-    .sub { color: var(--muted); font-size: 15px; }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
-    @media (min-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
-    section.card {
-      background: rgba(17,24,39,.7);
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: 16px;
-      padding: 18px 18px;
-      box-shadow: 0 10px 22px rgba(0,0,0,.35);
-      backdrop-filter: blur(6px);
-    }
-    h2 { margin: 0 0 10px; font-size: 20px; }
-    ul { margin: 0; padding-left: 18px; }
-    .pill { display: inline-block; padding: 6px 10px; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; margin: 4px 6px 0 0; font-size: 13px; color: var(--text); }
-    footer { margin: 24px 0 12px; text-align: center; color: var(--muted); font-size: 13px; }
-    .tag { background: rgba(34,211,238,.1); border: 1px solid rgba(34,211,238,.3); }
-    .project-title { font-weight: 700; font-size: 16px; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <header>
-      <div class="name">Sai Jayanth Sava</div>
-      <div class="sub">📍 Hyderabad &nbsp;•&nbsp; 📧 <a href="mailto:your.email@example.com">your.email@example.com</a> &nbsp;•&nbsp; 📞 9014754234</div>
-      <div class="sub">🔗 <a href="https://www.linkedin.com/in/your-link-here" target="_blank">LinkedIn</a> &nbsp;•&nbsp; 💻 <a href="https://github.com/your-username" target="_blank">GitHub</a></div>
-    </header>
+import React from "react";
+import { motion } from "framer-motion";
+import { Mail, Phone, MapPin, Link as LinkIcon, Download, Briefcase, Award, GraduationCap, FolderGit2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-    <section class="card">
-      <h2>About Me</h2>
-      <p>Software Engineer with 1.7 years of experience in the IT industry, specializing in Business Intelligence, Data Warehousing, and Reporting. Skilled in building SQL queries, developing Power BI dashboards, and designing ETL workflows using SSIS. Experienced in data administration, ensuring secure and accurate data availability for teams. Hands-on expertise in Power BI, SSIS, Snowflake, SQL Server, and Azure DevOps. I also build automations for monitoring and alerts to proactively detect issues and resolve them faster.</p>
-    </section>
+// —— Editable profile data ——
+const PROFILE = {
+  name: "Sai Jayanth Sava",
+  title: "Software Engineer — BI & Data",
+  location: "Hyderabad",
+  email: "saijayanthsava4@gmail.com",
+  phone: "9014754234",
+  linkedin: "https://www.linkedin.com/in/sai-jayanth-sava-468482210",
+  summary:
+    "Software Engineer with 1.7 years of experience in Business Intelligence, Data Warehousing, and Reporting. Skilled in Power BI, SQL, SSIS, Snowflake, and Azure DevOps. I also build automations for monitoring and alerts to proactively detect issues and resolve them faster.",
+};
 
-    <div class="grid">
-      <section class="card">
-        <h2>Technical Skills</h2>
-        <div>
-          <div class="pill tag">Power BI</div>
-          <div class="pill tag">SSIS</div>
-          <div class="pill tag">SSMS</div>
-          <div class="pill tag">Snowflake</div>
-          <div class="pill tag">SQL</div>
-          <div class="pill tag">Azure DevOps</div>
-          <div class="pill">Data Administration</div>
-          <div class="pill">Automation</div>
-          <div class="pill">Monitoring & Alerts</div>
+const SKILLS = [
+  { group: "Data & BI Tools", items: ["Power BI (DAX, Data Modeling, Dashboards)", "SSMS", "SSIS (ETL, Automation)"] },
+  { group: "Databases & Cloud", items: ["Snowflake", "Microsoft SQL Server", "Azure DevOps"] },
+  { group: "Programming & Scripting", items: ["SQL (Joins, CTEs, Window Functions, Optimization)"] },
+  { group: "Other Skills", items: ["Data Administration", "Report Automation", "Monitoring & Alerts", "Workflow Optimization"] },
+];
+
+const EXPERIENCE = [
+  {
+    role: "Software Engineer",
+    company: "Aggne – A Wipro Company",
+    period: "Jan 2024 – Present",
+    bullets: [
+      "Designed and optimized SQL queries for multiple business domains.",
+      "Built interactive Power BI dashboards enabling data‑driven decision‑making.",
+      "Automated ETL workflows using SSIS, improving refresh efficiency and reducing manual effort.",
+      "Created email‑alert automations to detect faulty data in reports or source datasets; resolved report issues and escalated source issues to respective teams.",
+      "Acted as Data Administrator ensuring secure access and data reliability.",
+      "Collaborated cross‑functionally using Azure DevOps for tracking and deployments.",
+    ],
+    achievements: [
+      "Reduced report generation time by 20% through SQL optimization.",
+      "Delivered custom Power BI dashboards used by stakeholders for audits and decisions.",
+      "Implemented automation‑based monitoring that improved response time and minimized manual intervention.",
+      "Received appreciation from stakeholders for improving reporting reliability.",
+    ],
+  },
+];
+
+const EDUCATION = [
+  {
+    degree: "B.Tech – Electronics and Communication Engineering",
+    school: "Usha Rama College of Engineering and Technology",
+    year: "2023",
+  },
+];
+
+const CERTS = ["Microsoft Power BI Certification", "SQL Certification"];
+
+const PROJECTS = [
+  {
+    title: "Sales Analytics Dashboard (Power BI)",
+    desc:
+      "Interactive dashboard to track KPIs, revenue trends, and customer behavior; provided actionable insights to stakeholders.",
+    stack: ["Power BI", "DAX", "SQL"],
+  },
+  {
+    title: "Report Building (BI Reports)",
+    desc:
+      "Designed and delivered business‑aligned reports that streamlined month‑end reporting and supported audits.",
+    stack: ["Power BI", "SQL"],
+  },
+  {
+    title: "Automation for Faulty Data Alerts",
+    desc:
+      "Automation that sends email alerts when faulty data is detected in reports or source datasets; improved accuracy and reduced manual monitoring.",
+    stack: ["SSIS", "SQL", "Automation"],
+  },
+];
+
+const Section = ({ id, title, icon, children }: { id: string; title: string; icon?: React.ReactNode; children: React.ReactNode }) => (
+  <section id={id} className="scroll-mt-24">
+    <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+      <div className="flex items-center gap-2 mb-4">
+        {icon}
+        <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
+      </div>
+      {children}
+    </motion.div>
+  </section>
+);
+
+export default function Portfolio() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-slate-100">
+      <div className="max-w-5xl mx-auto px-4 py-8">
+        {/* Header */}
+        <header className="mb-8">
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <div className="flex flex-col gap-1">
+              <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">{PROFILE.name}</h1>
+              <p className="text-slate-300">{PROFILE.title}</p>
+            </div>
+
+            <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-slate-300">
+              <span className="inline-flex items-center gap-1"><MapPin className="h-4 w-4" /> {PROFILE.location}</span>
+              <a className="inline-flex items-center gap-1 hover:underline" href={`mailto:${PROFILE.email}`}><Mail className="h-4 w-4" /> {PROFILE.email}</a>
+              <a className="inline-flex items-center gap-1 hover:underline" href={`tel:${PROFILE.phone}`}><Phone className="h-4 w-4" /> {PROFILE.phone}</a>
+              <a className="inline-flex items-center gap-1 hover:underline" href={PROFILE.linkedin} target="_blank" rel="noreferrer"><LinkIcon className="h-4 w-4" /> LinkedIn</a>
+            </div>
+
+            <div className="mt-4 flex flex-wrap gap-3">
+              <Button asChild className="rounded-2xl px-4 py-5">
+                <a href="#projects"><FolderGit2 className="mr-2 h-4 w-4" /> View Projects</a>
+              </Button>
+              <Button variant="secondary" asChild className="rounded-2xl px-4 py-5">
+                <a href="#experience"><Briefcase className="mr-2 h-4 w-4" /> Experience</a>
+              </Button>
+              <Button variant="outline" asChild className="rounded-2xl px-4 py-5">
+                <a href="#contact"><Mail className="mr-2 h-4 w-4" /> Contact</a>
+              </Button>
+            </div>
+          </motion.div>
+        </header>
+
+        {/* Summary */}
+        <Card className="bg-white/5 border-white/10 backdrop-blur mb-8 rounded-2xl shadow-lg">
+          <CardHeader>
+            <CardTitle>About Me</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-slate-300 leading-relaxed">{PROFILE.summary}</p>
+          </CardContent>
+        </Card>
+
+        {/* Skills & Experience grid */}
+        <div className="grid md:grid-cols-2 gap-6">
+          <Card className="bg-white/5 border-white/10 rounded-2xl">
+            <CardHeader>
+              <CardTitle>Technical Skills</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {SKILLS.map((s) => (
+                <div key={s.group}>
+                  <p className="font-semibold text-slate-200">{s.group}</p>
+                  <ul className="list-disc ml-5 text-slate-300">
+                    {s.items.map((it) => (
+                      <li key={it}>{it}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+
+          <Card id="experience" className="bg-white/5 border-white/10 rounded-2xl">
+            <CardHeader className="flex flex-row items-center gap-2">
+              <Briefcase className="h-5 w-5" />
+              <CardTitle>Professional Experience</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              {EXPERIENCE.map((e) => (
+                <div key={e.company}>
+                  <div className="flex items-center justify-between">
+                    <p className="font-semibold">{e.role} · {e.company}</p>
+                    <span className="text-sm text-slate-400">{e.period}</span>
+                  </div>
+                  <ul className="list-disc ml-5 text-slate-300 mt-2">
+                    {e.bullets.map((b, i) => (
+                      <li key={i}>{b}</li>
+                    ))}
+                  </ul>
+                  <div className="mt-3">
+                    <p className="font-semibold inline-flex items-center gap-2"><Award className="h-4 w-4" /> Key Achievements</p>
+                    <ul className="list-disc ml-5 text-slate-300 mt-1">
+                      {e.achievements.map((a, i) => (
+                        <li key={i}>{a}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
         </div>
-        <ul>
-          <li><b>Data &amp; BI Tools:</b> Power BI (Data Modeling, DAX, Dashboards), SSMS, SSIS (ETL, Automation)</li>
-          <li><b>Databases &amp; Cloud:</b> Snowflake, Microsoft SQL Server, Azure DevOps</li>
-          <li><b>Programming &amp; Scripting:</b> SQL (Joins, CTEs, Window Functions, Query Optimization)</li>
-          <li><b>Other Skills:</b> Data Administration, Report Automation, Monitoring Alerts, Workflow Optimization</li>
-        </ul>
-      </section>
 
-      <section class="card">
-        <h2>Professional Experience</h2>
-        <p><b>Software Engineer</b> — Aggne – A Wipro Company <br><span class="sub">Jan 2024 – Present</span></p>
-        <ul>
-          <li>Designed and optimized SQL queries for multiple business domains.</li><li>Built interactive Power BI dashboards enabling data-driven decision-making.</li><li>Automated ETL workflows using SSIS, reducing manual efforts and improving data refresh efficiency.</li><li>Created email alert automations to detect faulty data in reports or source datasets; resolved report issues and escalated source issues to respective teams.</li><li>Acted as Data Administrator, providing secure access to project data and ensuring data reliability.</li><li>Collaborated with cross-functional teams using Azure DevOps for tracking and deployment coordination.</li>
-        </ul>
-        <p><b>Key Achievements</b></p>
-        <ul>
-          <li>Reduced report generation time by 20% through SQL optimization.</li><li>Delivered custom Power BI dashboards used by stakeholders for audits and decisions.</li><li>Implemented automation-based monitoring that improved response time and minimized manual intervention.</li><li>Received appreciation from stakeholders for improving reporting reliability.</li>
-        </ul>
-      </section>
+        {/* Projects */}
+        <Section id="projects" title="Projects" icon={<FolderGit2 className="h-5 w-5" />}> 
+          <div className="grid md:grid-cols-3 gap-4">
+            {PROJECTS.map((p) => (
+              <Card key={p.title} className="bg-white/5 border-white/10 rounded-2xl">
+                <CardHeader>
+                  <CardTitle className="text-base">{p.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-slate-300 text-sm leading-relaxed">{p.desc}</p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {p.stack.map((tag: string) => (
+                      <span key={tag} className="text-xs px-2 py-1 rounded-full border border-cyan-400/30 bg-cyan-400/10">{tag}</span>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </Section>
+
+        {/* Education & Certifications */}
+        <div className="grid md:grid-cols-2 gap-6 mt-6">
+          <Card className="bg-white/5 border-white/10 rounded-2xl">
+            <CardHeader className="flex items-center gap-2">
+              <GraduationCap className="h-5 w-5" />
+              <CardTitle>Education</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {EDUCATION.map((ed) => (
+                <div key={ed.school} className="mb-2">
+                  <p className="font-semibold">{ed.degree}</p>
+                  <p className="text-slate-400 text-sm">{ed.school} · {ed.year}</p>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white/5 border-white/10 rounded-2xl">
+            <CardHeader>
+              <CardTitle>Certifications</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="list-disc ml-5 text-slate-300">
+                {CERTS.map((c) => (
+                  <li key={c}>{c}</li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Contact */}
+        <Section id="contact" title="Get in touch" icon={<Mail className="h-5 w-5" />}> 
+          <Card className="bg-white/5 border-white/10 rounded-2xl">
+            <CardContent className="pt-6">
+              <p className="text-slate-300 mb-4">The fastest way to reach me is email. I usually respond within a day.</p>
+              <div className="flex flex-wrap gap-3">
+                <Button asChild className="rounded-2xl"><a href={`mailto:${PROFILE.email}`}><Mail className="mr-2 h-4 w-4" /> Email</a></Button>
+                <Button variant="secondary" asChild className="rounded-2xl"><a href={PROFILE.linkedin} target="_blank" rel="noreferrer"><LinkIcon className="mr-2 h-4 w-4" /> LinkedIn</a></Button>
+                {/* Replace the href with a public link to your resume when hosted */}
+                <Button variant="outline" asChild className="rounded-2xl"><a href="#" onClick={(e) => e.preventDefault()}><Download className="mr-2 h-4 w-4" /> Download Resume</a></Button>
+              </div>
+            </CardContent>
+          </Card>
+        </Section>
+
+        <footer className="mt-10 text-center text-xs text-slate-400">© {new Date().getFullYear()} {PROFILE.name}. All rights reserved.</footer>
+      </div>
     </div>
-
-    <section class="card">
-      <h2>Projects</h2>
-      <p class='project-title'>Sales Analytics Dashboard (Power BI)</p><p>Built an interactive dashboard to track KPIs, revenue trends, and customer behavior; provided real-time insights to stakeholders.</p><p class='project-title'>Report Building (BI Reports)</p><p>Designed and delivered business-aligned reports that streamlined month-end reporting and supported audits.</p><p class='project-title'>Automation for Faulty Data Alerts</p><p>Developed an automation that sends email alerts when faulty data is detected in reports or source datasets; proactively resolved report issues and escalated source issues to relevant teams, improving accuracy and reducing manual monitoring.</p>
-    </section>
-
-    <div class="grid">
-      <section class="card">
-        <h2>Education</h2>
-        <p>B.Tech – Electronics and Communication Engineering, Usha Rama College of Engineering and Technology (2023)</p>
-      </section>
-      <section class="card">
-        <h2>Certifications</h2>
-        <ul>
-          <li>Microsoft Power BI Certification</li><li>SQL Certification</li>
-        </ul>
-      </section>
-    </div>
-
-    <footer>© Sai Jayanth Sava — Update links and contact info before sharing.</footer>
-  </div>
-</body>
-</html>
+  );
+}
